@@ -24,7 +24,7 @@ struct Node* createCircularList(int n) {
             temp = newNode;
         }
     }
-    temp->next = head; // Make it circular
+    temp->next = head;
     return head;
 }
 
@@ -39,20 +39,17 @@ void displayCircularList(struct Node* head) {
         printf("%d -> ", temp->data);
         temp = temp->next;
     } while (temp != head);
-    printf("(back to head)\n");
+    printf("head\n");
 }
 
 struct Node* mergeCircularLists(struct Node* head1, struct Node* head2) {
     if (!head1) return head2;
     if (!head2) return head1;
     struct Node *temp1 = head1, *temp2 = head2;
-    // Find last node of first list
     while (temp1->next != head1) temp1 = temp1->next;
-    // Find last node of second list
     while (temp2->next != head2) temp2 = temp2->next;
-    // Connect last of first to head of second
+
     temp1->next = head2;
-    // Connect last of second to head of first
     temp2->next = head1;
     return head1;
 }
@@ -73,4 +70,4 @@ int main() {
     printf("\nMerged Circular Linked List: ");
     displayCircularList(merged);
     return 0;
-} 
+}
