@@ -1,100 +1,71 @@
+// Program to implement Queue using Array with overflow and underflow checks
 #include <stdio.h>
-#include <conio.h>
-#define MAX 3
+#define MAX 100
 
-struct queue {
-    int arr[MAX];
-    int front;
-    int rear;
-};
+int queue[MAX]; // Array to store queue elements
+int front = -1, rear = -1; // Indices for front and rear
 
-int isfull(struct queue *q) {
-    return q->rear == MAX - 1;
-}
-
-int isempty(struct queue *q) {
-    return q->front == q->rear;
-}
-
-void enqueue(struct queue *q, int val) {
-    if (!isfull(q)) {
-        q->arr[++q->rear] = val;
-        printf("\nValue inserted successfully: %d\n", val);
-    } else {
-        printf("\nQueue overflow!!!\n");
-    }
-}
-
-int dequeue(struct queue *q) {
-    if (!isempty(q)) {
-        return q->arr[++q->front];
-    } else {
-        printf("\nQueue underflow!!!\n");
-        return -1;
-    }
-}
-
-void displayQueue(struct queue *q) {
-    if (isempty(q)) {
-        printf("\nQueue is empty\n");
+// Function to enqueue (add) an element to the queue
+void enqueue(int value) {
+    if (rear == MAX - 1) {
+        printf("Queue Overflow!\n");
         return;
     }
-    printf("\nCurrent queue elements:\n");
-    for (int i = q->front + 1; i <= q->rear; i++) {
-        printf("%d\n", q->arr[i]);
-    }
+    if (front == -1) front = 0;
+    queue[++rear] = value;
+    printf("Enqueued: %d\n", value);
 }
 
-void showMenu() {
-    printf("\nQueue Operations Menu:\n");
-    printf("1. Enqueue element\n");
-    printf("2. Dequeue element\n");
-    printf("3. Display queue\n");
-    printf("4. Exit\n");
-    printf("Enter your choice (1-4): ");
+// Function to dequeue (remove) an element from the queue
+void dequeue() {
+    if (front == -1 || front > rear) {
+        printf("Queue Underflow!\n");
+        return;
+    }
+    printf("Dequeued: %d\n", queue[front++]);
+    if (front > rear) front = rear = -1;
+}
+
+// Function to display the front element
+void peek() {
+    if (front == -1 || front > rear)
+        printf("Queue is empty.\n");
+    else
+        printf("Front element: %d\n", queue[front]);
+}
+
+// Function to display all elements in the queue
+void display() {
+    if (front == -1 || front > rear) {
+        printf("Queue is empty.\n");
+        return;
+    }
+    printf("Queue: ");
+    for (int i = front; i <= rear; i++) {
+        printf("%d -> ", queue[i]);
+    }
+    printf("NULL\n");
 }
 
 int main() {
-    struct queue q;
-    q.front = -1;
-    q.rear = -1;
-    int choice, value;
-    int dequeuedValue;
-
-    do {
-        clrscr();
-        showMenu();
+    int choice = 0, value, n;
+    printf("\nQueue implementation using array\n");
+    while (choice != -1) {
+        printf("\nEnter your choice (only numbers):\n1.enqueue\n2.dequeue\n3.display\n-1 to exit: ");
         scanf("%d", &choice);
-
-        switch (choice) {
-            case 1:
-                printf("Enter value to enqueue: ");
+        if (choice == 1) {
+            printf("\nEnter number of elements to enqueue: ");
+            scanf("%d", &n);
+            for (int i = 0; i < n; i++) {
+                printf("Enter number to enqueue: ");
                 scanf("%d", &value);
-                enqueue(&q, value);
-                break;
-
-            case 2:
-                dequeuedValue = dequeue(&q);
-                if (dequeuedValue != -1) {
-                    printf("\nDequeued value: %d\n", dequeuedValue);
-                }
-                break;
-
-            case 3:
-                displayQueue(&q);
-                break;
-
-            case 4:
-                printf("\nExiting program...\n");
-                break;
-
-            default:
-                printf("\nInvalid choice! Please try again.\n");
+                enqueue(value);
+            }
+        } else if (choice == 2) {
+            dequeue();
+        } else if (choice == 3) {
+            display();
         }
-
-        printf("\nPress any key to continue...");
-        getch();
-    } while (choice != 4);
-
+    }
     return 0;
 }

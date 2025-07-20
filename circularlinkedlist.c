@@ -1,3 +1,4 @@
+// Program to implement a Circular Linked List with insert and display operations
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -6,8 +7,9 @@ struct Node {
     struct Node* next;
 };
 
-struct Node* head = NULL;
+struct Node* head = NULL; // Pointer to the head of the circular linked list
 
+// Function to insert a node at the end of the circular linked list
 void insertEnd(int value) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->data = value;
@@ -16,6 +18,7 @@ void insertEnd(int value) {
         head = newNode;
     } else {
         struct Node* temp = head;
+        // Traverse to the last node
         while (temp->next != head)
             temp = temp->next;
         temp->next = newNode;
@@ -24,6 +27,7 @@ void insertEnd(int value) {
     printf("Value %d inserted at end.\n", value);
 }
 
+// Function to display the circular linked list
 void display() {
     if (head == NULL) {
         printf("\nCircular Linked List is empty\n");
@@ -38,6 +42,7 @@ void display() {
     printf("(head)\n");
 }
 
+// Function to display the menu
 void showMenu() {
     printf("\nCircular Linked List Menu:\n");
     printf("1. Insert at end\n");

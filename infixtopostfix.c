@@ -1,113 +1,62 @@
+// Program to convert an infix expression to postfix expression using stack
 #include <stdio.h>
 #include <ctype.h>
+#define MAX 100
 
-#define MAX 20
+char stack[MAX]; // Stack for operators
+int top = -1;
 
-struct Stack {
-    char arr[MAX];
-    int top;
-};
-
-void initStack(struct Stack *s) {
-    s->top = -1;
+// Function to push an element onto the stack
+void push(char c) {
+    stack[++top] = c;
 }
 
-int isFull(struct Stack *s) {
-    return s->top == MAX - 1;
-}
-
-int isEmpty(struct Stack *s) {
-    return s->top == -1;
-}
-
-void push(struct Stack *s, char value) {
-    if (isFull(s)) {
-        printf("Stack overflow!\n");
-    } else {
-        s->arr[++(s->top)] = value;
-        printf("Pushed %c to the stack\n", value);
-    }
-}
-
-char pop(struct Stack *s) {
-    if (isEmpty(s)) {
-        printf("Stack underflow! Cannot pop\n");
+// Function to pop an element from the stack
+char pop() {
+    if (top == -1)
         return -1;
-    } else {
-        return s->arr[(s->top)--];
-    }
+    return stack[top--];
 }
 
+// Function to return precedence of operators
 int precedence(char c) {
-    if (c == '+' || c == '-') {
-        return 1;
-    } else if (c == '*' || c == '/') {
-        return 2;
-    } else if (c == '^') {
+    if (c == '^')
         return 3;
-    }
+    if (c == '*' || c == '/')
+        return 2;
+    if (c == '+' || c == '-')
+        return 1;
     return 0;
 }
 
-void infixToPostfix(char expr[]) {
-    struct Stack s;
-    initStack(&s);
-    char post_expr[MAX];
-    int i = 0, j = 0;
-    char symb;
-    char topsymb;
-
-    while (expr[i] != '\0') {
-        symb = expr[i];
-
-        if (isdigit(symb)) {
-            post_expr[j++] = symb;
-        }
-
-        else if (symb == '(') {
-            push(&s, symb);
-        }
-
-        else if (symb == ')') {
-            while (!isEmpty(&s) && s.arr[s.top] != '(') {
-                post_expr[j++] = pop(&s);
-            }
-            pop(&s);  // Pop the '(' from the stack.
-        }
-        else {
-            while (!isEmpty(&s) && precedence(s.arr[s.top]) >= precedence(symb)) {
-                post_expr[j++] = pop(&s);
-            }
-            push(&s, symb);
-        }
-        i++;
-    }
-
-
-    while (!isEmpty(&s)) {
-        post_expr[j++] = pop(&s);
-    }
-
-    post_expr[j] = '\0';
-    printf("\nConverted Postfix Expression: %s\n", post_expr);
-}
-
 int main() {
-    char expr[MAX];
-    int pos = 0;
-    char ch;
-
-    printf("Enter the infix expression: ");
-    while ((ch = getchar()) != '\n' && pos < MAX) {
-        if (ch != ' ') {
-            expr[pos++] = ch;
+    char exp[MAX], postfix[MAX];
+    int i, j = 0;
+    printf("Enter infix expression: ");
+    scanf("%s", exp);
+    for (i = 0; exp[i] != '\0'; i++) {
+        char c = exp[i];
+        if (isalnum(c)) {
+            // If operand, add to postfix
+            postfix[j++] = c;
+        } else if (c == '(') {
+            push(c);
+        } else if (c == ')') {
+            // Pop until '(' is found
+            while (top != -1 && stack[top] != '(')
+                postfix[j++] = pop();
+            pop(); // Remove '(' from stack
+        } else {
+            // Operator: pop higher or equal precedence
+            while (top != -1 && precedence(stack[top]) >= precedence(c))
+                postfix[j++] = pop();
+            push(c);
         }
     }
-    expr[pos] = '\0';
-
-    printf("\nOriginal Infix Expression: %s\n", expr);
-
-    infixToPostfix(expr);
-
+    // Pop remaining operators
+    while (top != -1)
+        postfix[j++] = pop();
+    postfix[j] = '\0';
+    printf("Postfix expression: %s\n", postfix);
     return 0;
 }

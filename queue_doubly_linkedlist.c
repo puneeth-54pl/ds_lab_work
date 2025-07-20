@@ -1,3 +1,4 @@
+// Program to implement Queue using Doubly Linked List
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -7,9 +8,10 @@ struct Node {
     struct Node* next;
 };
 
-struct Node* front = NULL;
-struct Node* rear = NULL;
+struct Node* front = NULL; // Pointer to the front of the queue
+struct Node* rear = NULL;  // Pointer to the rear of the queue
 
+// Function to enqueue (add) an element to the queue
 void enqueue(int value) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     if (!newNode) {
@@ -28,6 +30,7 @@ void enqueue(int value) {
     printf("Enqueued: %d\n", value);
 }
 
+// Function to dequeue (remove) an element from the queue
 void dequeue() {
     if (!front) {
         printf("Underflow! Queue is empty.\n");
@@ -41,8 +44,7 @@ void dequeue() {
     free(temp);
 }
 
-
-
+// Function to display all elements in the queue
 void display() {
     if (!front) {
         printf("Queue is empty.\n");

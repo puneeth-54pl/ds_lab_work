@@ -1,3 +1,4 @@
+// Program to implement Stack using Doubly Linked List
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -7,8 +8,9 @@ struct Node {
     struct Node* next;
 };
 
-struct Node* top = NULL;
+struct Node* top = NULL; // Pointer to the top of the stack
 
+// Function to push an element onto the stack
 void push(int value) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     if (!newNode) {
@@ -23,6 +25,7 @@ void push(int value) {
     printf("Pushed: %d\n", value);
 }
 
+// Function to pop an element from the stack
 void pop() {
     if (!top) {
         printf("Stack Underflow!\n");
@@ -35,11 +38,13 @@ void pop() {
     free(temp);
 }
 
+// Function to display the top element
 void peek() {
     if (!top) printf("Stack is empty.\n");
     else printf("Top element: %d\n", top->data);
 }
 
+// Function to display all elements in the stack
 void display() {
     if (!top) {
         printf("Stack is empty.\n");
